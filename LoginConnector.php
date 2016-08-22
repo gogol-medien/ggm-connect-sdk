@@ -11,8 +11,12 @@
 
 namespace ggm\Connect;
 
+use ggm\Connect\Authentication\AccessToken;
+use ggm\Connect\DataNodes\UserInfo;
+use ggm\Connect\Exceptions\AccessTokenExpiredException;
 use ggm\Connect\Exceptions\SDKException;
 use ggm\Connect\Helpers\RedirectLoginHelper;
+use ggm\Connect\Http\HttpClient;
 use ggm\Connect\Http\OAuthClient;
 use ggm\Connect\Interfaces\ConnectorInterface;
 
@@ -80,11 +84,53 @@ class LoginConnector implements ConnectorInterface
         return $this->oAuthClient;
     }
 
+    /**
+     * @return RedirectLoginHelper
+     */
     public function getRedirectLoginHelper()
     {
         return new RedirectLoginHelper(
             $this->getOAuthClient()
         );
+    }
+
+    /**
+     * Uses the refresh token of an AccessToken
+     * to request a new token from the oauth endpoint.
+     *
+     * @param  AccessToken $accessToken
+     * @return AccessToken
+     * @throws AccessTokenExpiredException
+     * @throws SDKException
+     */
+    public function refreshAccessToken(AccessToken $accessToken)
+    {
+        if (!$accessToken->getRefreshToken()) {
+            throw new SDKException('AccessToken does not contain a refresh token');
+        }
+
+        return $this->getOAuthClient()->getAccessTokenFromRefresh($accessToken->getRefreshToken());
+    }
+
+    /**
+     * Fetches the UserInfo object for the supplied access token.
+     *
+     * @param  AccessToken $accessToken
+     * @return UserInfo
+     * @throws SDKException
+     * @throws
+     */
+    public function getUserInfo(AccessToken $accessToken)
+    {
+        $params = array(
+            'access_token' => (string)$accessToken
+        );
+
+        $url = $this->getPortalUrl().'/user/api/me.json?'.http_build_query($params, null, '&');
+
+        $response = HttpClient::dispatch($url);
+
+        return new UserInfo($response->getBody());
     }
 
     /**

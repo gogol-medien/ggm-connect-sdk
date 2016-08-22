@@ -12,6 +12,9 @@
 namespace ggm\Connect\Http;
 
 use ggm\Connect\Authentication\AccessToken;
+use ggm\Connect\Exceptions\AccessTokenExpiredException;
+use ggm\Connect\Exceptions\HttpException;
+use ggm\Connect\Exceptions\ResponseException;
 use ggm\Connect\Exceptions\SDKException;
 use ggm\Connect\Http\HttpClient;
 use ggm\Connect\Interfaces\ConnectorInterface;
@@ -64,7 +67,7 @@ class OAuthClient
     }
 
     /**
-     * Request an access token with the supplied code
+     * Request an AccessToken with the supplied code
      *
      * @param  string $code
      * @param  string $redirectUri The redirect URI which was used to generate the login URL
@@ -82,13 +85,29 @@ class OAuthClient
     }
 
     /**
+     * Request an AccessToken with the supplied refresh token
+     *
+     * @param  string $refreshToken
+     * @return AccessToken
+     * @throws AccessTokenExpiredException
+     * @throws SDKException
+     */
+    public function getAccessTokenFromRefresh($refreshToken)
+    {
+        $params = array(
+            'refresh_token' => $refreshToken
+        );
+
+        return $this->requestAccessToken($params);
+    }
+
+    /**
      * Requests an access token from the oauth endpoint
      *
      * @param  array  $params
      * @return AccessToken
+     * @throws AccessTokenExpiredException
      * @throws SDKException
-     * @throws HttpException
-     * @throws ResponseException
      */
     protected function requestAccessToken(array $params)
     {
@@ -106,12 +125,26 @@ class OAuthClient
 
         $url = $this->connector->getPortalUrl().'/'.self::TOKEN_PATH.'?'.http_build_query($params, null, '&');
 
-        $response = HttpClient::dispatch($url);
+        try {
+            $response = HttpClient::dispatch($url);
+        } catch (ResponseException $ex) {
+            throw new SDKException('Invalid server response');
+        } catch (HttpException $ex) {
+            throw new SDKException('Server connection failed');
+        }
 
         if ($response->getHttpCode() === 200) {
             return new AccessToken($response->getBody());
+        } else if ($response->getHttpCode() === 400) {
+            if ($response->getError() === 'invalid_grant') {
+                throw new AccessTokenExpiredException('The token used for the grant request has expired or is invalid');
+            } else if ($response->getError() === 'invalid_client') {
+                throw new SDKException('Invalid oauth client configuration');
+            } else {
+                throw new SDKException('Unable to request an access token (reason: bad request)');
+            }
         } else {
-            throw new SDKException('Unable to obtain access token');
+            throw new SDKException('Unable to request an access token (reason: server error)');
         }
     }
 }

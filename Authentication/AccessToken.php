@@ -39,18 +39,26 @@ class AccessToken
     protected $scope;
 
     /**
-     *  Initializes the access token properties if passed
-     *  a JsonResponse body or similarly structured array
+     * Initializes the access token properties if passed
+     * a JsonResponse body or similarly structured array,
+     * or the access token as a string.
      *
-     * @param array|null $responseBody
+     * Alternatively, you can pass an access token string
+     * to create a simple access token with reduced functionality.
+     *
+     * @param array|string|null $tokenData
      */
-    public function __construct(array $responseBody = null)
+    public function __construct($tokenData = null)
     {
-        if (is_array($responseBody)) {
-            $this->token = isset($responseBody['access_token']) ? $responseBody['access_token'] : null;
-            $this->refreshToken = isset($responseBody['refresh_token']) ? $responseBody['refresh_token'] : null;
-            $this->expiresAt = isset($responseBody['expires_in']) ? (time() + (int)$responseBody['expires_in']) : null;
-            $this->scope = isset($responseBody['scope']) ? explode(' ', $responseBody['expires_in']) : null;
+        if (is_array($tokenData)) {
+
+            $this->token = isset($tokenData['access_token']) ? $tokenData['access_token'] : null;
+            $this->refreshToken = isset($tokenData['refresh_token']) ? $tokenData['refresh_token'] : null;
+            $this->expiresAt = isset($tokenData['expires_in']) ? (time() + (int)$tokenData['expires_in']) : null;
+            $this->scope = isset($tokenData['scope']) ? explode(' ', $tokenData['scope']) : null;
+
+        } else if (is_string($tokenData)) {
+            $this->token = $tokenData;
         }
     }
 
@@ -89,5 +97,13 @@ class AccessToken
     public function getScope()
     {
         return $this->scope;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isExpired()
+    {
+        return is_numeric($this->expiresAt) ? ($this->expiresAt < time()) : true;
     }
 }

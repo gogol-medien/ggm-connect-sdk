@@ -31,11 +31,21 @@ class JsonResponse
     protected $body;
 
     /**
+     * @var string
+     */
+    protected $error;
+
+    /**
+     * @var string
+     */
+    protected $errorDescription;
+
+    /**
      * Initializes the response with the raw data of a curl response and
      * curl_getinfo data.
      *
-     * @param [type] $response [description]
-     * @param [type] $info     [description]
+     * @param array $response
+     * @param array $info
      */
     public function __construct($response, $info)
     {
@@ -56,15 +66,22 @@ class JsonResponse
 
         // We expext the body to contain JSON data
         if ($this->header['content_type'] === 'application/json') {
+
             $body = json_decode($response, true);
 
-            // If the body is null or false while the http code is 200,
-            // something most likely went wrong
-            if ((is_null($body) || $body === false) && $this->header['http_code'] === 200) {
-                throw new ResponseException('Malformed response body');
-            }
+            if ($this->header['http_code'] >= 400) {
+                // Something went wrong, populate the error fields
+                $this->error = $body['error'];
+                $this->errorDescription = $body['error_description'];
 
-            $this->body = $body;
+            } else if ((is_null($body) || $body === false) && $this->header['http_code'] === 200) {
+                // If the body is null or false while the http code is 200,
+                // something most likely went wrong
+                throw new ResponseException('Malformed response body');
+
+            } else {
+                $this->body = $body;
+            }
         } else {
             throw new ResponseException('Invalid content type (expected `application/json`)');
         }
@@ -88,5 +105,25 @@ class JsonResponse
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * Returns the error (populated if the http code is >=400)
+     *
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Returns the error description (populated if the http code is >=400)
+     *
+     * @return string
+     */
+    public function getErrorDescription()
+    {
+        return $this->errorDescription;
     }
 }
