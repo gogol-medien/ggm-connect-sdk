@@ -117,8 +117,6 @@ class LoginConnector implements ConnectorInterface
      *
      * @param  AccessToken $accessToken
      * @return UserInfo
-     * @throws SDKException
-     * @throws
      */
     public function getUserInfo(AccessToken $accessToken)
     {

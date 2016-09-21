@@ -22,6 +22,7 @@ class HttpClient
      *
      * @param  string $url
      * @return JsonResponse
+     * @throws  HttpException
      */
     public static function dispatch($url)
     {
