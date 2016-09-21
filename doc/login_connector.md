@@ -15,7 +15,7 @@ Requirements
 Usage
 -----
 
-1. **Generate a login redirect link**
+* **Generate a login redirect link**
 ```php
 $ggmLoginConnector = new LoginConnector(array(
     'portal_url' => 'http://my.portal-webapp.org',
@@ -33,7 +33,7 @@ $loginUrl = $ggmLoginConnector->getRedirectLoginHelper()->getLoginUrl('http://my
 You can have the link open either directly or in a popup window. Once the login / auth process is completed, the user will be forwarded to the endpoint you have specified when generating the URL.
 
 
-2. **Fetch the access token**
+* **Fetch the access token**
 
 Inside your redirect endpoint, you use the LoginConnector to retrieve the access token.
 
@@ -47,7 +47,7 @@ $token = $ggmLoginConnector->getRedirectLoginHelper()->getAccessToken('http://my
 It is recommended to save the full AccessToken instance for later use instead of requesting a new one repeatedly.
 
 
-3. **Fetch user data**
+* **Fetch user data**
 
 The LoginConnector provides access to the `UserInfo` data node, which contains basic user information (id, name, email).
 
@@ -56,7 +56,7 @@ The LoginConnector provides access to the `UserInfo` data node, which contains b
 $userInfo = $ggmLoginConnector->getUserInfo($token);
 ```
 
-4. **Refreshing the AccessToken**
+* **Refresh the AccessToken**
 
 AccessTokens are only valid for about one hour, however it is possible to refresh them using the refresh token which is provided with every access token, stored in the AccessToken instance, and valid for roughly three months. It is recommended to check for token expiration before each request to the API.
 
