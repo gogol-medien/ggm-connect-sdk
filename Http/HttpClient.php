@@ -28,10 +28,10 @@ class HttpClient
     {
         $ch = curl_init($url);
 
-        $params = [
+        $params = array(
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true
-        ];
+        );
 
         curl_setopt_array($ch, $params);
 
