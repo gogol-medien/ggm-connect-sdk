@@ -44,7 +44,7 @@ class UserInfo
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = array())
     {
         $this->id = isset($data['id']) ? $data['id'] : null;
         $this->firstName = isset($data['first_name']) ? $data['first_name'] : null;

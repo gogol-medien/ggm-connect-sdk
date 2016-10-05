@@ -12,12 +12,12 @@
 namespace ggm\Connect\Http;
 
 use ggm\Connect\Authentication\AccessToken;
+use ggm\Connect\Connectors\BaseConnector;
 use ggm\Connect\Exceptions\AccessTokenExpiredException;
 use ggm\Connect\Exceptions\HttpException;
 use ggm\Connect\Exceptions\ResponseException;
 use ggm\Connect\Exceptions\SDKException;
 use ggm\Connect\Http\HttpClient;
-use ggm\Connect\Interfaces\ConnectorInterface;
 
 /**
  * class OAuthClient
@@ -37,12 +37,12 @@ class OAuthClient
     const TOKEN_PATH = 'oauth/v2/token';
 
     /**
-     * @var ConnectorInterface
+     * @var BaseConnector
      */
     private $connector;
 
 
-    public function __construct(ConnectorInterface $connector)
+    public function __construct(BaseConnector $connector)
     {
         $this->connector = $connector;
     }
@@ -89,8 +89,6 @@ class OAuthClient
      *
      * @param  string $refreshToken
      * @return AccessToken
-     * @throws AccessTokenExpiredException
-     * @throws SDKException
      */
     public function getAccessTokenFromRefresh($refreshToken)
     {
@@ -102,6 +100,16 @@ class OAuthClient
     }
 
     /**
+     * Request an AccessToken with the configured client credentials
+     *
+     * @return AccessToken
+     */
+    public function getAccessTokenFromClientCredentials()
+    {
+        return $this->requestAccessToken();
+    }
+
+    /**
      * Requests an access token from the oauth endpoint
      *
      * @param  array  $params
@@ -109,7 +117,7 @@ class OAuthClient
      * @throws AccessTokenExpiredException
      * @throws SDKException
      */
-    protected function requestAccessToken(array $params)
+    protected function requestAccessToken(array $params = array())
     {
         $params['client_id'] = $this->connector->getClientId();
         $params['client_secret'] = $this->connector->getSecret();

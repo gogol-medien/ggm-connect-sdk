@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect;
+namespace ggm\Connect\Connectors;
 
 use ggm\Connect\Authentication\AccessToken;
 use ggm\Connect\DataNodes\UserInfo;
@@ -17,15 +17,14 @@ use ggm\Connect\Exceptions\AccessTokenExpiredException;
 use ggm\Connect\Exceptions\SDKException;
 use ggm\Connect\Helpers\RedirectLoginHelper;
 use ggm\Connect\Http\HttpClient;
-use ggm\Connect\Http\OAuthClient;
-use ggm\Connect\Interfaces\ConnectorInterface;
+
 
 /**
  * Class LoginConnector
  *
  * @package ggm-connect-sdk
  */
-class LoginConnector implements ConnectorInterface
+class LoginConnector extends BaseConnector
 {
     /**
      * @var array
@@ -73,18 +72,6 @@ class LoginConnector implements ConnectorInterface
     }
 
     /**
-     * @return OAuthClient
-     */
-    protected function getOAuthClient()
-    {
-        if (!$this->oAuthClient) {
-            $this->oAuthClient = new OAuthClient($this);
-        }
-
-        return $this->oAuthClient;
-    }
-
-    /**
      * @return RedirectLoginHelper
      */
     public function getRedirectLoginHelper()
@@ -100,7 +87,6 @@ class LoginConnector implements ConnectorInterface
      *
      * @param  AccessToken $accessToken
      * @return AccessToken
-     * @throws AccessTokenExpiredException
      * @throws SDKException
      */
     public function refreshAccessToken(AccessToken $accessToken)
@@ -129,29 +115,5 @@ class LoginConnector implements ConnectorInterface
         $response = HttpClient::dispatch($url);
 
         return new UserInfo($response->getBody());
-    }
-
-    /**
-     * Interface Functions
-     */
-
-    public function getClientId()
-    {
-        return $this->config['client_id'];
-    }
-
-    public function getSecret()
-    {
-        return $this->config['secret'];
-    }
-
-    public function getPortalUrl()
-    {
-        return $this->config['portal_url'];
-    }
-
-    public function getScope()
-    {
-        return $this->config['scope'];
     }
 }

@@ -42,6 +42,8 @@ class HttpClient
 
         if ($response === false) {
             throw new HttpException('Request dispatch failed');
+        } else if ($info['http_code'] === 403) {
+            throw new HttpException('Access denied');
         }
 
         // ToDo: Once there's different response types, delegate
