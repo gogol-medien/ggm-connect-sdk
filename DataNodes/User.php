@@ -94,12 +94,92 @@ class User
             $this->registrationDate = date_create($data['registration_date']) ?: null;
         }
 
-        if ($data['user_type'] && in_array($data['user_type'], array(self::TYPE_PERSON, self::TYPE_COMPANY, self::TYPE_INSTITUTION))) {
+        if (isset($data['user_type']) && in_array($data['user_type'], array(self::TYPE_PERSON, self::TYPE_COMPANY, self::TYPE_INSTITUTION))) {
             $this->userType = $data['user_type'];
         }
 
         $this->userSegment = isset($data['user_segment']) ? $data['user_segment'] : null;
         $this->location = isset($data['location']) ? new Location($data['location']) : null;
         $this->staticTags = isset($data['static_tags']) && is_array($data['static_tags']) ? $data['static_tags'] : null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRegistrationDate()
+    {
+        return $this->registrationDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserType()
+    {
+        return $this->userType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserSegment()
+    {
+        return $this->userSegment;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStaticTags()
+    {
+        return $this->staticTags;
     }
 }
