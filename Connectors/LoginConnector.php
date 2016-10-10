@@ -112,7 +112,7 @@ class LoginConnector extends BaseConnector
 
         $url = $this->getPortalUrl().'/user/api/me.json?'.http_build_query($params, null, '&');
 
-        $response = HttpClient::dispatch($url);
+        $response = HttpClient::dispatchGET($url);
 
         return new UserInfo($response->getBody());
     }

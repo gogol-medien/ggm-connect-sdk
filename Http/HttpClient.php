@@ -14,17 +14,18 @@ namespace ggm\Connect\Http;
 use ggm\Connect\Exceptions\HttpException;
 use ggm\Connect\Exceptions\ResponseException;
 use ggm\Connect\Http\JsonResponse;
+use ggm\Connect\Http\Response;
 
 class HttpClient
 {
     /**
-     * Dispatches a request and returns a response object
+     * Dispatches a GET request and returns a response object
      *
      * @param  string $url
-     * @return JsonResponse
-     * @throws  HttpException
+     * @return Response
+     * @throws HttpException
      */
-    public static function dispatch($url)
+    public static function dispatchGET($url)
     {
         $ch = curl_init($url);
 
@@ -46,8 +47,14 @@ class HttpClient
             throw new HttpException('Access denied');
         }
 
-        // ToDo: Once there's different response types, delegate
-        // creating the correct response object to a factory class
-        return new JsonResponse($response, $info);
+        switch ($info['content_type']) {
+            case 'application/json':
+                return new JsonResponse($response, $info);
+
+            default:
+                return new Response($response, $info);
+        }
+
+
     }
 }

@@ -16,7 +16,7 @@ use ggm\Connect\DataNodes\UserResultSet;
 use ggm\Connect\Exceptions\HtttpException;
 use ggm\Connect\Exceptions\ResponseException;
 use ggm\Connect\Exceptions\SDKException;
-use ggm\Connect\Http\HttpClient;
+
 
 /**
  * Class UserApiConnector
@@ -31,29 +31,15 @@ class UserApiConnector extends BaseConnector
      * @param  array $searchParams
      * @return UserResultSet
      */
-    public function userSearch($searchParams)
+    public function usersSearch($searchParams)
     {
         $users = null;
 
-        try {
-            $params = array(
-                'access_token' => (string)$this->getClientCredentialsAccessToken()
-            );
+        $uri = '/user/api/users.json';
+        $response = $this->dispatchRequest($uri, $searchParams);
 
-            $url = $this->getPortalUrl().'/user/api/users.json?'.http_build_query($params, null, '&');
-
-            $response = HttpClient::dispatch($url);
-
-            if ($response->getHttpCode() === 200) {
-                $users = new UserResultSet($response->getBody());
-            }
-        } catch (SDKException $ex) {
-            // Bubble SDKExceptions
-            throw $ex;
-        } catch (HtttpException $ex) {
-            throw new SDKException('HTTP error: '.$ex->getMessage());
-        } catch (ResponseException $ex) {
-            throw new SDKException('Response error: '.$ex->getMessage());
+        if ($response->getHttpCode() === 200) {
+            $users = new UserResultSet($response->getBody());
         }
 
         return $users;
@@ -70,25 +56,11 @@ class UserApiConnector extends BaseConnector
     {
         $user = null;
 
-        try {
-            $params = array(
-                'access_token' => (string)$this->getClientCredentialsAccessToken()
-            );
+        $uri = '/user/api/users/'.$userId.'.json';
+        $response = $this->dispatchRequest($uri);
 
-            $url = $this->getPortalUrl().'/user/api/users/'.$userId.'.json?'.http_build_query($params, null, '&');
-
-            $response = HttpClient::dispatch($url);
-
-            if ($response->getHttpCode() === 200) {
-                $user = new User($response->getBody());
-            }
-        } catch (SDKException $ex) {
-            // Bubble SDKExceptions
-            throw $ex;
-        } catch (HtttpException $ex) {
-            throw new SDKException('HTTP error: '.$ex->getMessage());
-        } catch (ResponseException $ex) {
-            throw new SDKException('Response error: '.$ex->getMessage());
+        if ($response->getHttpCode() === 200) {
+            $user = new User($response->getBody());
         }
 
         return $user;

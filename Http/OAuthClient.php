@@ -134,7 +134,7 @@ class OAuthClient
         $url = $this->connector->getPortalUrl().'/'.self::TOKEN_PATH.'?'.http_build_query($params, null, '&');
 
         try {
-            $response = HttpClient::dispatch($url);
+            $response = HttpClient::dispatchGET($url);
         } catch (ResponseException $ex) {
             throw new SDKException('Invalid server response');
         } catch (HttpException $ex) {

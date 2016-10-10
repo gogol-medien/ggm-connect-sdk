@@ -12,10 +12,11 @@
 namespace ggm\Connect\Connectors;
 
 use ggm\Connect\DataNodes\Article;
+use ggm\Connect\DataNodes\ArticleCategory;
 use ggm\Connect\Exceptions\HtttpException;
 use ggm\Connect\Exceptions\ResponseException;
 use ggm\Connect\Exceptions\SDKException;
-use ggm\Connect\Http\HttpClient;
+
 
 /**
  * Class UserApiConnector
@@ -34,27 +35,14 @@ class ArticleApiConnector extends BaseConnector
     {
         $article = null;
 
-        try {
-            $params = array(
-                'access_token' => (string)$this->getClientCredentialsAccessToken()
-            );
+        $uri = '/a/api/articles/'.$articleId.'.json';
+        $response = $this->dispatchRequest($uri);
 
-            $url = $this->getPortalUrl().'/a/api/articles/'.$articleId.'.json?'.http_build_query($params, null, '&');
-
-            $response = HttpClient::dispatch($url);
-
-            if ($response->getHttpCode() === 200) {
-                $article = new Article($response->getBody());
-            }
-        } catch (SDKException $ex) {
-            // Bubble SDKExceptions
-            throw $ex;
-        } catch (HtttpException $ex) {
-            throw new SDKException('HTTP error: '.$ex->getMessage());
-        } catch (ResponseException $ex) {
-            throw new SDKException('Response error: '.$ex->getMessage());
+        if ($response->getHttpCode() === 200) {
+            $article = new Article($response->getBody());
         }
 
         return $article;
     }
+
 }

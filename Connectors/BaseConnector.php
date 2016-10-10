@@ -13,6 +13,7 @@ namespace ggm\Connect\Connectors;
 
 use ggm\Connect\Authentication\AccessToken;
 use ggm\Connect\Exceptions\SDKException;
+use ggm\Connect\Http\HttpClient;
 use ggm\Connect\Http\OAuthClient;
 
 /**
@@ -95,6 +96,45 @@ abstract class BaseConnector
         }
 
         return $this->ccAccessToken;
+    }
+
+    /**
+     * Dispatches a request using a client_credential access token
+     *
+     * @param  string $uri
+     * @param  array $params
+     * @param  string $method
+     * @return ggm\Connect\Http\Response
+     * @throws SDKException
+     */
+    protected function dispatchRequest($uri, array $params = array(), $method = 'GET')
+    {
+        $response = null;
+
+        try {
+            $params['access_token'] = (string)$this->getClientCredentialsAccessToken();
+
+            $url = $this->getPortalUrl().$uri.'?'.http_build_query($params, null, '&');
+
+            switch ($method) {
+                case 'GET':
+                    $response = HttpClient::dispatchGET($url);
+                    break;
+
+                default:
+                    throw new SDKException('Invalid method');
+            }
+
+        } catch (SDKException $ex) {
+            // Bubble SDKExceptions
+            throw $ex;
+        } catch (HtttpException $ex) {
+            throw new SDKException('HTTP error: '.$ex->getMessage());
+        } catch (ResponseException $ex) {
+            throw new SDKException('Response error: '.$ex->getMessage());
+        }
+
+        return $response;
     }
 
     public function getClientId()
