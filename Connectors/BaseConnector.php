@@ -112,13 +112,23 @@ abstract class BaseConnector
         $response = null;
 
         try {
-            $params['access_token'] = (string)$this->getClientCredentialsAccessToken();
-
-            $url = $this->getPortalUrl().$uri.'?'.http_build_query($params, null, '&');
+            $accessToken = (string)$this->getClientCredentialsAccessToken();
 
             switch ($method) {
                 case 'GET':
+                    $params['access_token'] = $accessToken;
+                    $url = $this->getPortalUrl().$uri.'?'.http_build_query($params, null, '&');
                     $response = HttpClient::dispatchGET($url);
+                    break;
+
+                case 'POST':
+                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(array('access_token' => $accessToken), null, '&');
+                    $response = HttpClient::dispatchPOST($url, $params);
+                    break;
+
+                case 'PUT':
+                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(array('access_token' => $accessToken), null, '&');
+                    $response = HttpClient::dispatchPUT($url, $params);
                     break;
 
                 default:

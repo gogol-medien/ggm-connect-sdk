@@ -16,7 +16,7 @@ namespace ggm\Connect\DataNodes;
  *
  * @package ggm-connect-sdk
  */
-class Location
+class Location extends DataNode
 {
     /**
      * @var int

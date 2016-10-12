@@ -16,7 +16,7 @@ namespace ggm\Connect\DataNodes;
  *
  * @package ggm-connect-sdk
  */
-class Article
+class Article extends DataNode
 {
     // Article Status constants
     const STATUS_DRAFT = 'draft';
@@ -31,10 +31,10 @@ class Article
     const SEGMENT_LOTTERY = 'lottery';
 
     // TextElement constants
-    const SUBLINE = 'subline';
-    const KICKER = 'kicker';
-    const TEXT = 'text';
-    const TEASER = 'teaser';
+    const TE_SUBLINE = 'subline';
+    const TE_KICKER = 'kicker';
+    const TE_TEXT = 'text';
+    const TE_TEASER = 'teaser';
 
 
     /**
@@ -112,6 +112,11 @@ class Article
      */
     protected $tags;
 
+    /**
+     * @var string
+     */
+    protected $downloadUrl;
+
 
     /**
      * Initializes a User object with the response
@@ -169,11 +174,31 @@ class Article
     }
 
     /**
+     * @param string $status
+     * @return Article
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     * @return Article
+     */
+    public function setCreated(\DateTime $created)
+    {
+        $this->created = $created;
+        return $this;
     }
 
     /**
@@ -185,11 +210,21 @@ class Article
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @param int $template
+     * @return Article
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+        return $this;
     }
 
     /**
@@ -201,11 +236,31 @@ class Article
     }
 
     /**
+     * @param string $title
+     * @return Article
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getSegment()
     {
         return $this->segment;
+    }
+
+    /**
+     * @param string $segment
+     * @return Article
+     */
+    public function setSegment($segment)
+    {
+        $this->segment = $segment;
+        return $this;
     }
 
     /**
@@ -217,11 +272,39 @@ class Article
     }
 
     /**
+     * @param array $staticTags
+     * @return Article
+     */
+    public function setStaticTags($staticTags)
+    {
+        $this->staticTags = $staticTags;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getTextElement($textElement)
     {
         return isset($this->textElements[$textElement]) ? $this->textElements[$textElement] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTextElements()
+    {
+        return $this->textElements;
+    }
+
+    /**
+     * @param array $textElements
+     * @return Article
+     */
+    public function setTextElements($textElements)
+    {
+        $this->textElements = $textElements;
+        return $this;
     }
 
     /**
@@ -233,11 +316,31 @@ class Article
     }
 
     /**
+     * @param User $user
+     * @return Article
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
      * @return ArticleCategory
      */
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * @param ArticleCategory $category
+     * @return Article
+     */
+    public function setCategory(ArticleCategory $category)
+    {
+        $this->category = $category;
+        return $this;
     }
 
     /**
@@ -249,11 +352,31 @@ class Article
     }
 
     /**
+     * @param Location $location
+     * @return Article
+     */
+    public function setLocation(Location $location = null)
+    {
+        $this->location = $location;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * @param array $images
+     * @return Article
+     */
+    public function setImages($images)
+    {
+        $this->images = $images;
+        return $this;
     }
 
     /**
@@ -270,5 +393,15 @@ class Article
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * @param array $tags
+     * @return Article
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+        return $this;
     }
 }

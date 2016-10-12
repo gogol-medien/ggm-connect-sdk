@@ -16,7 +16,7 @@ namespace ggm\Connect\DataNodes;
  *
  * @package ggm-connect-sdk
  */
-class User
+class User extends DataNode
 {
     /**
      * User Type Constants
