@@ -70,7 +70,7 @@ class ArticleApiConnector extends BaseConnector
      */
     public function articlePut(Article $article)
     {
-        $uri = '/a/api/articles.json';
+        $uri = '/a/api/articles/'.$article->getId().'.json';
 
         $data = array('article' => $this->prepareArticleForDispatch($article));
 
