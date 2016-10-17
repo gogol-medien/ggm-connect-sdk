@@ -87,10 +87,10 @@ class ArticleApiConnector extends BaseConnector
     public function imagesPost(array $images)
     {
         $uri = '/a/api/images.json';
-
-        $data = array('images' => array_map(function($image) {
-            return $this->prepareImageForDispatch($image);
-        }, $images));
+        $data = array('images');
+        foreach ($images as $image) {
+            $data['images'][] = $this->prepareImageForDispatch($image);
+        }
 
         $data['images'] = json_encode($data['images']);
 

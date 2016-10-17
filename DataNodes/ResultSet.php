@@ -69,8 +69,9 @@ abstract class ResultSet
 
     protected function hydrate()
     {
-        $this->hydrated = array_map(function($data) {
-            return new static::$hydrationClass($data);
-        }, $this->raw);
+        $this->hydrated = array();
+        foreach ($this->raw as $raw) {
+            $this->hydrated[] = new static::$hydrationClass($raw);
+        }
     }
 }
