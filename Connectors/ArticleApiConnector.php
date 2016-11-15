@@ -78,6 +78,25 @@ class ArticleApiConnector extends BaseConnector
     }
 
     /**
+     * Retrieves one image by ID
+     *
+     * @return Image
+     */
+    public function imageGet($imageId)
+    {
+        $image = null;
+
+        $uri = '/a/api/images/'.$imageId.'.json';
+        $response = $this->dispatchRequest($uri);
+
+        if ($response->getHttpCode() === 200) {
+            $image = new Image($response->getBody());
+        }
+
+        return $image;
+    }
+
+    /**
      * Posts new Images into the article context
      *
      * @param  array
