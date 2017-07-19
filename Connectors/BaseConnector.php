@@ -46,15 +46,15 @@ abstract class BaseConnector
      * @param array $config
      * @throws SDKException
      */
-    public function __construct(array $config = array())
+    public function __construct(array $config = [])
     {
         $config = array_merge(
-            array(
+            [
                 'portal_url' => null,
                 'client_id' => null,
                 'secret' => null,
-                'scope' => array()
-            ),
+                'scope' => []
+            ],
             $config
         );
 
@@ -107,7 +107,7 @@ abstract class BaseConnector
      * @return ggm\Connect\Http\Response
      * @throws SDKException
      */
-    protected function dispatchRequest($uri, array $params = array(), $method = 'GET')
+    protected function dispatchRequest($uri, array $params = [], $method = 'GET')
     {
         $response = null;
 
@@ -122,12 +122,12 @@ abstract class BaseConnector
                     break;
 
                 case 'POST':
-                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(array('access_token' => $accessToken), null, '&');
+                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(['access_token' => $accessToken], null, '&');
                     $response = HttpClient::dispatchPOST($url, $params);
                     break;
 
                 case 'PUT':
-                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(array('access_token' => $accessToken), null, '&');
+                    $url = $this->getPortalUrl().$uri.'?'.http_build_query(['access_token' => $accessToken], null, '&');
                     $response = HttpClient::dispatchPUT($url, $params);
                     break;
 

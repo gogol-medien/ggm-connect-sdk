@@ -50,7 +50,7 @@ class Response
     public function __construct($response, $info)
     {
         // Extract header information
-        $this->header = array();
+        $this->header = [];
 
         if (isset($info['http_code']) && $info['http_code']) {
             $this->header['http_code'] = $info['http_code'];

@@ -82,7 +82,7 @@ class User extends DataNode
      *
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         $this->id = isset($data['id']) ? $data['id'] : null;
         $this->firstName = isset($data['first_name']) ? $data['first_name'] : null;
@@ -94,7 +94,7 @@ class User extends DataNode
             $this->registrationDate = date_create($data['registration_date']) ?: null;
         }
 
-        if (isset($data['user_type']) && in_array($data['user_type'], array(self::TYPE_PERSON, self::TYPE_COMPANY, self::TYPE_INSTITUTION))) {
+        if (isset($data['user_type']) && in_array($data['user_type'], [self::TYPE_PERSON, self::TYPE_COMPANY, self::TYPE_INSTITUTION])) {
             $this->userType = $data['user_type'];
         }
 

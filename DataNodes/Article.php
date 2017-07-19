@@ -124,11 +124,11 @@ class Article extends DataNode
      *
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         $this->id = isset($data['id']) ? $data['id'] : null;
 
-        if (isset($data['status']) && in_array($data['status'], array(self::STATUS_DRAFT, self::STATUS_PUBLISHED, self::STATUS_REJECTED, self::STATUS_DELETED))) {
+        if (isset($data['status']) && in_array($data['status'], [self::STATUS_DRAFT, self::STATUS_PUBLISHED, self::STATUS_REJECTED, self::STATUS_DELETED])) {
             $this->status = $data['status'];
         }
 
@@ -143,12 +143,12 @@ class Article extends DataNode
         $this->template = isset($data['template']) ? $data['template'] : null;
         $this->title = isset($data['title']) ? $data['title'] : null;
 
-        if (isset($data['segment']) && in_array($data['segment'], array(self::SEGMENT_ARTICLE, self::SEGMENT_LOTTERY, self::SEGMENT_IMAGE_POST, self::SEGMENT_IMAGE_GALLERY))) {
+        if (isset($data['segment']) && in_array($data['segment'], [self::SEGMENT_ARTICLE, self::SEGMENT_LOTTERY, self::SEGMENT_IMAGE_POST, self::SEGMENT_IMAGE_GALLERY])) {
             $this->segment = $data['segment'];
         }
 
         $this->staticTags = isset($data['static_tags']) ? $data['static_tags'] : null;
-        $this->textElements = isset($data['text_elements']) ? $data['text_elements'] : array();
+        $this->textElements = isset($data['text_elements']) ? $data['text_elements'] : [];
         $this->user = isset($data['user']) ? new User($data['user']) : null;
         $this->category = isset($data['category']) ? new ArticleCategory($data['category']) : null;
         $this->location = isset($data['location']) ? new Location($data['location']) : null;

@@ -22,11 +22,11 @@ abstract class DataNode
      * Creates a stub instance which can be used as
      * reference in put / post requests.
      *
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * @param  mixed $id
+     * @return object
      */
     public static function getStubWithId($id)
     {
-        return new static(array('id' => $id));
+        return new static(['id' => $id]);
     }
 }

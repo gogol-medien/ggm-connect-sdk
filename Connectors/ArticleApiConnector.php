@@ -56,7 +56,7 @@ class ArticleApiConnector extends BaseConnector
     {
         $uri = '/a/api/articles.json';
 
-        $data = array('article' => $this->prepareArticleForDispatch($article));
+        $data = ['article' => $this->prepareArticleForDispatch($article)];
 
         return $this->dispatchRequest($uri, $data, 'POST')->getBody();
     }
@@ -72,7 +72,7 @@ class ArticleApiConnector extends BaseConnector
     {
         $uri = '/a/api/articles/'.$article->getId().'.json';
 
-        $data = array('article' => $this->prepareArticleForDispatch($article));
+        $data = ['article' => $this->prepareArticleForDispatch($article)];
 
         return $this->dispatchRequest($uri, $data, 'PUT')->getHttpCode() === 204;
     }
@@ -106,7 +106,7 @@ class ArticleApiConnector extends BaseConnector
     public function imagesPost(array $images)
     {
         $uri = '/a/api/images.json';
-        $data = array('images');
+        $data = ['images'];
         foreach ($images as $image) {
             $data['images'][] = $this->prepareImageForDispatch($image);
         }
@@ -181,7 +181,7 @@ class ArticleApiConnector extends BaseConnector
      */
     protected function prepareArticleForDispatch(Article $article)
     {
-        $retData = array();
+        $retData = [];
 
         !$article->getId() ?: $retData['id'] = $article->getId();
         !$article->getStatus() ?: $retData['status'] = $article->getStatus();
@@ -190,9 +190,9 @@ class ArticleApiConnector extends BaseConnector
         !$article->getCreated() ?: $retData['created'] = $article->getCreated()->format(\DateTime::ISO8601);
         !is_null($article->getTitle()) ?: $retData['title'] = $article->getTitle();
         !is_null($article->getStaticTags()) ?: $retData['static_tags'] = $article->getStaticTags();
-        !$article->getCategory() ?: $retData['category'] = array('id' => $article->getCategory()->getId());
-        !$article->getUser() ?: $retData['user'] = array('id' => $article->getUser()->getId());
-        !$article->getLocation() ?: $retData['location'] = array('id' => $article->getLocation()->getId());
+        !$article->getCategory() ?: $retData['category'] = ['id' => $article->getCategory()->getId()];
+        !$article->getUser() ?: $retData['user'] = ['id' => $article->getUser()->getId()];
+        !$article->getLocation() ?: $retData['location'] = ['id' => $article->getLocation()->getId()];
         !is_null($article->getTags()) ?: $retData['tags'] = $article->getTags();
 
         !$article->getTitle() ?: $retData['title'] = $article->getTitle();
@@ -206,7 +206,7 @@ class ArticleApiConnector extends BaseConnector
                 }, $article->getImages());
             } else {
                 // When creating a new article, we need to send an array of URL structs
-                $retData['upload_images'] = array();
+                $retData['upload_images'] = [];
                 foreach ($article->getImages() as $image) {
                     if (!$image->getDownloadUrl()) {
                         continue;
@@ -230,7 +230,7 @@ class ArticleApiConnector extends BaseConnector
      */
     protected function prepareImageForDispatch(Image $image)
     {
-        $retData = array();
+        $retData = [];
 
         !$image->getId() ?: $retData['id'] = $image->getId();
         !$image->getUser() ?: $retData['user'] = $image->getUser()->getId();

@@ -83,23 +83,7 @@ class RedirectLoginHelper
         // Remove the CSRF token since it's supposed to be single use
         PersistenceHelper::delete('state');
 
-        // Manual implementation of hash_equals (available starting from PHP5.6)
-        $isSame = true;
-
-        if (strlen($knownState) != strlen($state)) {
-            $isSame = false;
-        } else {
-            $res = $knownState ^ $state;
-            $cmp = 0;
-
-            for ($i = strlen($res) - 1; $i >= 0; $i--) {
-                $cmp |= ord($res[$i]);
-
-                $isSame = !$cmp;
-            }
-        }
-
-        if (!$isSame) {
+        if (!hash_equals($knownState, $state)) {
             throw new SDKException('CSRF validation failed');
         }
     }

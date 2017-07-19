@@ -32,26 +32,22 @@ class PersistenceHelper
 
     public static function get($key)
     {
-        // return self::{}($key);
-        return forward_static_call('self::'.self::getHandler().'get', $key);
+        return self::{self::getHandler().'get'}($key);
     }
 
     public static function set($key, $value)
     {
-        // return self::{self::getHandler().'set'}($key, $value);
-        return forward_static_call('self::'.self::getHandler().'set', $key, $value);
+        return self::{self::getHandler().'set'}($key, $value);
     }
 
     public static function delete($key)
     {
-        // return self::{self::getHandler().'delete'}($key);
-        return forward_static_call('self::'.self::getHandler().'delete', $key);
+        return self::{self::getHandler().'delete'}($key);
     }
 
     public static function clear()
     {
-        // return self::{self::getHandler().'clear'}();
-        return forward_static_call('self::'.self::getHandler().'clear');
+        return self::{self::getHandler().'clear'}();
     }
 
     /**
@@ -60,9 +56,7 @@ class PersistenceHelper
     private static function getHandler()
     {
         if (!self::$persistenceHandler) {
-
-            // Note:: Since we have to support PHP 5.3, we can't use "session_status()" here
-            if (session_id() !== '') {
+            if (session_status() === PHP_SESSION_ACTIVE) {
                 self::$persistenceHandler = 'session_';
             } else {
                 self::$persistenceHandler = 'memory_';
@@ -111,7 +105,7 @@ class PersistenceHelper
      */
     private static function memory_clear()
     {
-        self::$data = array();
+        self::$data = [];
         return true;
     }
 

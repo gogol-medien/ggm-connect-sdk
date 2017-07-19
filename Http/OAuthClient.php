@@ -56,12 +56,12 @@ class OAuthClient
      */
     public function getAuthorizationUrl($redirectUri, $state)
     {
-        $params = array(
+        $params = [
             'client_id' => $this->connector->getClientId(),
             'state' => $state,
             'response_type' => 'code',
             'redirect_uri' => $redirectUri
-        );
+        ];
 
         return $this->connector->getPortalUrl().'/'.self::AUTHORIZATION_PATH.'?'.http_build_query($params, null, '&');
     }
@@ -76,10 +76,10 @@ class OAuthClient
      */
     public function getAccessTokenFromCode($code, $redirectUri = '')
     {
-        $params = array(
+        $params = [
             'code' => $code,
             'redirect_uri' => $redirectUri
-        );
+        ];
 
         return $this->requestAccessToken($params);
     }
@@ -92,9 +92,9 @@ class OAuthClient
      */
     public function getAccessTokenFromRefresh($refreshToken)
     {
-        $params = array(
+        $params = [
             'refresh_token' => $refreshToken
-        );
+        ];
 
         return $this->requestAccessToken($params);
     }
@@ -117,7 +117,7 @@ class OAuthClient
      * @throws AccessTokenExpiredException
      * @throws SDKException
      */
-    protected function requestAccessToken(array $params = array())
+    protected function requestAccessToken(array $params = []))
     {
         $params['client_id'] = $this->connector->getClientId();
         $params['client_secret'] = $this->connector->getSecret();

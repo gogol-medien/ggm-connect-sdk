@@ -43,15 +43,15 @@ class LoginConnector extends BaseConnector
      *
      * @throws SDKException
      */
-    public function __construct(array $config = array())
+    public function __construct(array $config = [])
     {
         $config = array_merge(
-            array(
+            [
                 'portal_url' => null,
                 'client_id' => null,
                 'secret' => null,
-                'scope' => array()
-            ),
+                'scope' => []
+            ],
             $config
         );
 
@@ -106,9 +106,9 @@ class LoginConnector extends BaseConnector
      */
     public function getUserInfo(AccessToken $accessToken)
     {
-        $params = array(
+        $params = [
             'access_token' => (string)$accessToken
-        );
+        ];
 
         $url = $this->getPortalUrl().'/user/api/me.json?'.http_build_query($params, null, '&');
 
