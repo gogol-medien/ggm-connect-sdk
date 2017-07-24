@@ -9,33 +9,23 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\DataNode;
+
+use ggm\Connect\Model\DateTime;
+
 
 /**
- * Class Article
+ * Class Eventitem
  *
  * @package ggm-connect-sdk
  */
-class Article extends DataNode
+class Eventitem extends DataNode
 {
-    // Article Status constants
+    // Eventitem Status constants
     const STATUS_DRAFT = 'draft';
     const STATUS_PUBLISHED = 'published';
     const STATUS_REJECTED = 'rejected';
     const STATUS_DELETED = 'deleted';
-
-    // Article Segment constants
-    const SEGMENT_ARTICLE = 'article';
-    const SEGMENT_IMAGE_POST = 'image_post';
-    const SEGMENT_IMAGE_GALLERY = 'image_gallery';
-    const SEGMENT_LOTTERY = 'lottery';
-
-    // TextElement constants
-    const TE_SUBLINE = 'subline';
-    const TE_KICKER = 'kicker';
-    const TE_TEXT = 'text';
-    const TE_TEASER = 'teaser';
-
 
     /**
      * @var int
@@ -58,9 +48,9 @@ class Article extends DataNode
     protected $updated;
 
     /**
-     * @var int
+     * @var \DateTime
      */
-    protected $template;
+    protected $published;
 
     /**
      * @var string
@@ -70,7 +60,7 @@ class Article extends DataNode
     /**
      * @var string
      */
-    protected $segment;
+    protected $description;
 
     /**
      * @var array
@@ -78,17 +68,12 @@ class Article extends DataNode
     protected $staticTags;
 
     /**
-     * @var array
-     */
-    protected $textElements;
-
-    /**
      * @var User
      */
     protected $user;
 
     /**
-     * @var ArticleCategory
+     * @var EventitemCategory
      */
     protected $category;
 
@@ -110,23 +95,18 @@ class Article extends DataNode
     /**
      * @var array
      */
-    protected $tags;
-
-    /**
-     * @var string
-     */
-    protected $downloadUrl;
+    protected $eventitemDates = [];
 
 
     /**
-     * Initializes a User object with the response
+     * Initializes a Eventitem object with the response
      * data of a request to the corresponding api endpoint
      *
      * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
+        $this->id = $data['id'] ?? null;
 
         if (isset($data['status']) && in_array($data['status'], [self::STATUS_DRAFT, self::STATUS_PUBLISHED, self::STATUS_REJECTED, self::STATUS_DELETED])) {
             $this->status = $data['status'];
@@ -140,21 +120,29 @@ class Article extends DataNode
             $this->updated = date_create($data['updated']) ?: null;
         }
 
-        $this->template = isset($data['template']) ? $data['template'] : null;
-        $this->title = isset($data['title']) ? $data['title'] : null;
-
-        if (isset($data['segment']) && in_array($data['segment'], [self::SEGMENT_ARTICLE, self::SEGMENT_LOTTERY, self::SEGMENT_IMAGE_POST, self::SEGMENT_IMAGE_GALLERY])) {
-            $this->segment = $data['segment'];
+        if (isset($data['published'])) {
+            $this->published = date_create($data['published']) ?: null;
         }
 
-        $this->staticTags = isset($data['static_tags']) ? $data['static_tags'] : null;
-        $this->textElements = isset($data['text_elements']) ? $data['text_elements'] : [];
+        $this->title = $data['title'] ?? null;
+        $this->description = $data['description'] ?? null;
+
+        $this->staticTags = $data['static_tags'] ?? null;
         $this->user = isset($data['user']) ? new User($data['user']) : null;
-        $this->category = isset($data['category']) ? new ArticleCategory($data['category']) : null;
+        $this->category = isset($data['category']) ? new EventCalendarCategory($data['category']) : null;
         $this->location = isset($data['location']) ? new Location($data['location']) : null;
         $this->images = isset($data['images']) ? array_map(function($item) { return new Image($item); }, $data['images']) : null;
         $this->imageCount = isset($data['image_count']) ? $data['image_count'] : null;
-        $this->tags = isset($data['tags']) ? array_map(function($item) { return $item['name_norm']; }, $data['tags']) : null;
+
+        if (isset($data['eventitem_dates']) && is_array($data['eventitem_dates'])) {
+            foreach ($data['eventitem_dates'] as $dtString) {
+                $dt = DateTime::initWithString($dtString);
+
+                if ($dt) {
+                    $this->eventitemDates[] = $dt;
+                }
+            }
+        }
     }
 
     /**
@@ -175,7 +163,7 @@ class Article extends DataNode
 
     /**
      * @param string $status
-     * @return Article
+     * @return Eventitem
      */
     public function setStatus($status)
     {
@@ -193,7 +181,7 @@ class Article extends DataNode
 
     /**
      * @param \DateTime $created
-     * @return Article
+     * @return Eventitem
      */
     public function setCreated(\DateTime $created)
     {
@@ -210,24 +198,6 @@ class Article extends DataNode
     }
 
     /**
-     * @return int
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param int $template
-     * @return Article
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getTitle()
@@ -237,7 +207,7 @@ class Article extends DataNode
 
     /**
      * @param string $title
-     * @return Article
+     * @return Eventitem
      */
     public function setTitle($title)
     {
@@ -248,18 +218,18 @@ class Article extends DataNode
     /**
      * @return string
      */
-    public function getSegment()
+    public function getDescription()
     {
-        return $this->segment;
+        return $this->description;
     }
 
     /**
-     * @param string $segment
-     * @return Article
+     * @param string $description
+     * @return Eventitem
      */
-    public function setSegment($segment)
+    public function setDescription($description)
     {
-        $this->segment = $segment;
+        $this->description = $description;
         return $this;
     }
 
@@ -273,37 +243,11 @@ class Article extends DataNode
 
     /**
      * @param array $staticTags
-     * @return Article
+     * @return Eventitem
      */
     public function setStaticTags($staticTags)
     {
         $this->staticTags = $staticTags;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTextElement($textElement)
-    {
-        return isset($this->textElements[$textElement]) ? $this->textElements[$textElement] : null;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTextElements()
-    {
-        return $this->textElements;
-    }
-
-    /**
-     * @param array $textElements
-     * @return Article
-     */
-    public function setTextElements($textElements)
-    {
-        $this->textElements = $textElements;
         return $this;
     }
 
@@ -317,7 +261,7 @@ class Article extends DataNode
 
     /**
      * @param User $user
-     * @return Article
+     * @return Eventitem
      */
     public function setUser(User $user)
     {
@@ -326,7 +270,7 @@ class Article extends DataNode
     }
 
     /**
-     * @return ArticleCategory
+     * @return EventCalendarCategory
      */
     public function getCategory()
     {
@@ -334,10 +278,10 @@ class Article extends DataNode
     }
 
     /**
-     * @param ArticleCategory $category
-     * @return Article
+     * @param EventCalendarCategory $category
+     * @return Eventitem
      */
-    public function setCategory(ArticleCategory $category)
+    public function setCategory(EventCalendarCategory $category)
     {
         $this->category = $category;
         return $this;
@@ -353,7 +297,7 @@ class Article extends DataNode
 
     /**
      * @param Location $location
-     * @return Article
+     * @return Eventitem
      */
     public function setLocation(Location $location = null)
     {
@@ -371,7 +315,7 @@ class Article extends DataNode
 
     /**
      * @param array $images
-     * @return Article
+     * @return Eventitem
      */
     public function setImages($images)
     {
@@ -390,18 +334,19 @@ class Article extends DataNode
     /**
      * @return array
      */
-    public function getTags()
+    public function getEvenitemDates()
     {
-        return $this->tags;
+        return $this->eventitemDates;
     }
 
     /**
-     * @param array $tags
-     * @return Article
+     * @param array $eventitemDates
+     * @return Eventitem
      */
-    public function setTags($tags)
+    public function setEventitemDates(array $eventitemDates)
     {
-        $this->tags = $tags;
+        $this->eventitemDates = $eventitemDates;
         return $this;
     }
 }
+

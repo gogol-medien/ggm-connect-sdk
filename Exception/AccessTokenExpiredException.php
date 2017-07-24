@@ -9,14 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Exceptions;
+namespace ggm\Connect\Exception;
 
 /**
- * Class ResponseException
+ * Class AccessTokenExpiredException
  *
  * @package ggm-connect-sdk
  */
-class ResponseException extends \Exception
+class AccessTokenExpiredException extends \Exception
 {
 
 }

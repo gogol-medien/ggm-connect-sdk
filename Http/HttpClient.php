@@ -11,8 +11,8 @@
 
 namespace ggm\Connect\Http;
 
-use ggm\Connect\Exceptions\HttpException;
-use ggm\Connect\Exceptions\ResponseException;
+use ggm\Connect\Exception\HttpException;
+use ggm\Connect\Exception\ResponseException;
 use ggm\Connect\Http\JsonResponse;
 use ggm\Connect\Http\Response;
 

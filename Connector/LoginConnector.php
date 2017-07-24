@@ -9,13 +9,13 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Connectors;
+namespace ggm\Connect\Connector;
 
 use ggm\Connect\Authentication\AccessToken;
-use ggm\Connect\DataNodes\UserInfo;
-use ggm\Connect\Exceptions\AccessTokenExpiredException;
-use ggm\Connect\Exceptions\SDKException;
-use ggm\Connect\Helpers\RedirectLoginHelper;
+use ggm\Connect\DataNode\UserInfo;
+use ggm\Connect\Exception\AccessTokenExpiredException;
+use ggm\Connect\Exception\SDKException;
+use ggm\Connect\Helper\RedirectLoginHelper;
 use ggm\Connect\Http\HttpClient;
 
 
@@ -36,40 +36,6 @@ class LoginConnector extends BaseConnector
      */
     protected $oAuthClient;
 
-    /**
-     * Instantiates a new PortalConnect object
-     *
-     * @param array $config
-     *
-     * @throws SDKException
-     */
-    public function __construct(array $config = [])
-    {
-        $config = array_merge(
-            [
-                'portal_url' => null,
-                'client_id' => null,
-                'secret' => null,
-                'scope' => []
-            ],
-            $config
-        );
-
-        // Check if all the required config elements are set
-        if (!$config['portal_url']) {
-            throw new SDKException('Required "portal_url" not supplied in config');
-        }
-
-        if (!$config['client_id']) {
-            throw new SDKException('Required "client_id" not supplied in config');
-        }
-
-        if (!$config['secret']) {
-            throw new SDKException('Required "secret" not supplied in config');
-        }
-
-        $this->config = $config;
-    }
 
     /**
      * @return RedirectLoginHelper

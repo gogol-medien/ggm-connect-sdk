@@ -9,12 +9,12 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Helpers;
+namespace ggm\Connect\Helper;
 
 use ggm\Connect\Authentication\AccessToken;
-use ggm\Connect\Exceptions\SDKException;
-use ggm\Connect\Helpers\PersistenceHelper;
-use ggm\Connect\Helpers\RandomStringHelper;
+use ggm\Connect\Exception\SDKException;
+use ggm\Connect\Helper\PersistenceHelper;
+use ggm\Connect\Helper\RandomStringHelper;
 use ggm\Connect\Http\OAuthClient;
 
 

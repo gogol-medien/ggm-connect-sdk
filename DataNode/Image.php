@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\DataNode;
 
 /**
  * Class Image
@@ -54,19 +54,19 @@ class Image extends DataNode
     protected $downloadUrl;
 
     /**
-     * Initializes a Image object with the response
+     * Initializes an Image object with the response
      * data of a request to the corresponding api endpoint
      *
      * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
+        $this->id = $data['id'] ?? null;
         $this->user = isset($data['user']) ? User::getStubWithId($data['user']['id']) : null;
-        $this->url = isset($data['url']) ? $data['url'] : null;
-        $this->caption = isset($data['caption']) ? $data['caption'] : null;
-        $this->copyright = isset($data['copyright']) ? $data['copyright'] : null;
-        $this->urlSet = isset($data['url_set']) ? $data['url_set'] : null;
+        $this->url = $data['url'] ?? null;
+        $this->caption = $data['caption'] ?? null;
+        $this->copyright = $data['copyright'] ?? null;
+        $this->urlSet = $data['url_set'] ?? null;
     }
 
     /**

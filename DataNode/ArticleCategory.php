@@ -9,14 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Exceptions;
+namespace ggm\Connect\DataNode;
 
 /**
- * Class HttpException
+ * Class ArticleCategory
  *
  * @package ggm-connect-sdk
  */
-class HttpException extends \Exception
+class ArticleCategory extends Category
 {
 
 }

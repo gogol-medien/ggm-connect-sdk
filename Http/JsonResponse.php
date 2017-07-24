@@ -11,7 +11,7 @@
 
 namespace ggm\Connect\Http;
 
-use ggm\Connect\Exceptions\ResponseException;
+use ggm\Connect\Exception\ResponseException;
 
 /**
  * Class JsonResponse
@@ -50,8 +50,8 @@ class JsonResponse extends Response
 
             if ($this->header['http_code'] >= 400) {
                 // Something went wrong, populate the error fields
-                $this->error = isset($body['error']) ? $body['error'] : null;
-                $this->errorDescription = isset($body['error_description']) ? $body['error_description'] : null;
+                $this->error = $body['error'] ?? null;
+                $this->errorDescription = $body['error_description'] ?? null;
 
             } else if ((is_null($body) || $body === false) && $this->header['http_code'] === 200) {
                 // If the body is null or false while the http code is 200,

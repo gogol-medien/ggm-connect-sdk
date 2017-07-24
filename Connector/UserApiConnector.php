@@ -9,13 +9,13 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Connectors;
+namespace ggm\Connect\Connector;
 
-use ggm\Connect\DataNodes\User;
-use ggm\Connect\DataNodes\UserResultSet;
-use ggm\Connect\Exceptions\HtttpException;
-use ggm\Connect\Exceptions\ResponseException;
-use ggm\Connect\Exceptions\SDKException;
+use ggm\Connect\DataNode\User;
+use ggm\Connect\DataNode\UserResultSet;
+use ggm\Connect\Exception\HtttpException;
+use ggm\Connect\Exception\ResponseException;
+use ggm\Connect\Exception\SDKException;
 
 
 /**

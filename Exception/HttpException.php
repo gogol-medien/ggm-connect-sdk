@@ -9,17 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\Exception;
 
 /**
- * Class UserResultSet
+ * Class HttpException
  *
  * @package ggm-connect-sdk
  */
-class ArticleCategoryResultSet extends ResultSet
+class HttpException extends \Exception
 {
-    /**
-     * @var string
-     */
-    protected static $hydrationClass = 'ggm\Connect\DataNodes\ArticleCategory';
+
 }

@@ -12,11 +12,11 @@
 namespace ggm\Connect\Http;
 
 use ggm\Connect\Authentication\AccessToken;
-use ggm\Connect\Connectors\BaseConnector;
-use ggm\Connect\Exceptions\AccessTokenExpiredException;
-use ggm\Connect\Exceptions\HttpException;
-use ggm\Connect\Exceptions\ResponseException;
-use ggm\Connect\Exceptions\SDKException;
+use ggm\Connect\Connector\BaseConnector;
+use ggm\Connect\Exception\AccessTokenExpiredException;
+use ggm\Connect\Exception\HttpException;
+use ggm\Connect\Exception\ResponseException;
+use ggm\Connect\Exception\SDKException;
 use ggm\Connect\Http\HttpClient;
 
 /**
@@ -117,7 +117,7 @@ class OAuthClient
      * @throws AccessTokenExpiredException
      * @throws SDKException
      */
-    protected function requestAccessToken(array $params = []))
+    protected function requestAccessToken(array $params = [])
     {
         $params['client_id'] = $this->connector->getClientId();
         $params['client_secret'] = $this->connector->getSecret();

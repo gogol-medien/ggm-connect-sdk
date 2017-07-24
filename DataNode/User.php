@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\DataNode;
 
 /**
  * Class User
@@ -51,6 +51,11 @@ class User extends DataNode
     protected $enabled;
 
     /**
+     * @var bool
+     */
+    protected $locked;
+
+    /**
      * @var \DateTime
      */
     protected $registrationDate;
@@ -84,11 +89,12 @@ class User extends DataNode
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
-        $this->firstName = isset($data['first_name']) ? $data['first_name'] : null;
-        $this->lastName = isset($data['last_name']) ? $data['last_name'] : null;
-        $this->email = isset($data['email']) ? $data['email'] : null;
-        $this->enabled =  isset($data['enabled']) ? $data['enabled'] : null;
+        $this->id = $data['id'] ?? null;
+        $this->firstName = $data['first_name'] ?? null;
+        $this->lastName = $data['last_name'] ?? null;
+        $this->email = $data['email'] ?? null;
+        $this->enabled =  $data['enabled'] ?? null;
+        $this->locked =  $data['enabled'] ?? null;
 
         if (isset($data['registration_date'])) {
             $this->registrationDate = date_create($data['registration_date']) ?: null;
@@ -139,6 +145,14 @@ class User extends DataNode
      * @return bool
      */
     public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLocked()
     {
         return $this->enabled;
     }

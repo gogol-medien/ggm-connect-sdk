@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Helpers;
+namespace ggm\Connect\Helper;
 
 
 class PersistenceHelper

@@ -9,10 +9,10 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Connectors;
+namespace ggm\Connect\Connector;
 
 use ggm\Connect\Authentication\AccessToken;
-use ggm\Connect\Exceptions\SDKException;
+use ggm\Connect\Exception\SDKException;
 use ggm\Connect\Http\HttpClient;
 use ggm\Connect\Http\OAuthClient;
 
@@ -40,9 +40,8 @@ abstract class BaseConnector
      */
     protected $ccAccessToken;
 
+
     /**
-     * Instantiates a new connector object
-     *
      * @param array $config
      * @throws SDKException
      */
@@ -165,5 +164,25 @@ abstract class BaseConnector
     public function getScope()
     {
         return $this->config['scope'];
+    }
+
+    /**
+     * Converts a generic Image node into the appropriate
+     * array structure used for HTTP POST/PUT requests
+     *
+     * @param  Image  $image
+     * @return array
+     */
+    protected function prepareImageForDispatch(Image $image)
+    {
+        $retData = [];
+
+        !$image->getId() ?: $retData['id'] = $image->getId();
+        !$image->getUser() ?: $retData['user'] = $image->getUser()->getId();
+        !$image->getCaption() ?: $retData['caption'] = $image->getCaption();
+        !$image->getCopyright() ?: $retData['copyright'] = $image->getCopyright();
+        !$image->getDownloadUrl() ?: $retData['url'] = $image->getDownloadUrl();
+
+        return $retData;
     }
 }

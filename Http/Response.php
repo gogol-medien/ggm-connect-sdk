@@ -11,7 +11,7 @@
 
 namespace ggm\Connect\Http;
 
-use ggm\Connect\Exceptions\ResponseException;
+use ggm\Connect\Exception\ResponseException;
 
 /**
  * Class Response

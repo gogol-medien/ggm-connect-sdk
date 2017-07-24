@@ -9,14 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Exceptions;
+namespace ggm\Connect\DataNode;
 
 /**
- * Class SDKException
+ * Class EventCategory
  *
  * @package ggm-connect-sdk
  */
-class SDKException extends \Exception
+class EventCalendarCategory extends Category
 {
 
 }

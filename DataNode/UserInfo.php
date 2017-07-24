@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\DataNode;
 
 /**
  * Class UserInfo
@@ -46,10 +46,10 @@ class UserInfo
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
-        $this->firstName = isset($data['first_name']) ? $data['first_name'] : null;
-        $this->lastName = isset($data['last_name']) ? $data['last_name'] : null;
-        $this->email = isset($data['email']) ? $data['email'] : null;
+        $this->id = $data['id'] ?? null;
+        $this->firstName = $data['first_name'] ?? null;
+        $this->lastName = $data['last_name'] ?? null;
+        $this->email = $data['email'] ?? null;
     }
 
     /**

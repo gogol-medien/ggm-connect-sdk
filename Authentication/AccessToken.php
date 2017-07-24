@@ -52,8 +52,8 @@ class AccessToken
     {
         if (is_array($tokenData)) {
 
-            $this->token = isset($tokenData['access_token']) ? $tokenData['access_token'] : null;
-            $this->refreshToken = isset($tokenData['refresh_token']) ? $tokenData['refresh_token'] : null;
+            $this->token = $tokenData['access_token'] ?? null;
+            $this->refreshToken = $tokenData['refresh_token'] ?? null;
             $this->expiresAt = isset($tokenData['expires_in']) ? (time() + (int)$tokenData['expires_in']) : null;
             $this->scope = isset($tokenData['scope']) ? explode(' ', $tokenData['scope']) : null;
 

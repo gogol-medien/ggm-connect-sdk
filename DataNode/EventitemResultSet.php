@@ -9,14 +9,18 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Exceptions;
+namespace ggm\Connect\DataNode;
+
 
 /**
- * Class AccessTokenExpiredException
+ * Class EventitemResultSet
  *
  * @package ggm-connect-sdk
  */
-class AccessTokenExpiredException extends \Exception
+class EventitemResultSet extends ResultSet
 {
-
+    /**
+     * @var string
+     */
+    protected static $hydrationClass = 'ggm\Connect\DataNode\Eventitem';
 }

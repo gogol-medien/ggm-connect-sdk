@@ -9,17 +9,17 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\Connectors;
+namespace ggm\Connect\Connector;
 
-use ggm\Connect\DataNodes\Article;
-use ggm\Connect\DataNodes\ArticleCategory;
-use ggm\Connect\DataNodes\ArticleCategoryResultSet;
-use ggm\Connect\DataNodes\Image;
-use ggm\Connect\Exceptions\SDKException;
+use ggm\Connect\DataNode\Article;
+use ggm\Connect\DataNode\ArticleCategory;
+use ggm\Connect\DataNode\ArticleCategoryResultSet;
+use ggm\Connect\DataNode\Image;
+use ggm\Connect\Exception\SDKException;
 
 
 /**
- * Class UserApiConnector
+ * Class ArticleApiConnector
  *
  * @package ggm-connect-sdk
  */
@@ -30,6 +30,7 @@ class ArticleApiConnector extends BaseConnector
      *
      * @param  int $articleId
      * @return Article
+     * @throws SDKException
      */
     public function articleGet($articleId)
     {
@@ -48,7 +49,7 @@ class ArticleApiConnector extends BaseConnector
     /**
      * Posts a new Article
      *
-     * @param  Article $article [description]
+     * @param  Article $article
      * @return array
      * @throws SDKException
      */
@@ -64,7 +65,7 @@ class ArticleApiConnector extends BaseConnector
     /**
      * Updates an existing Article
      *
-     * @param  Article $article [description]
+     * @param  Article $article
      * @return bool
      * @throws SDKException
      */
@@ -81,6 +82,7 @@ class ArticleApiConnector extends BaseConnector
      * Retrieves one image by ID
      *
      * @return Image
+     * @throws SDKException
      */
     public function imageGet($imageId)
     {
@@ -138,6 +140,7 @@ class ArticleApiConnector extends BaseConnector
      *
      * @param  int $categoryId
      * @return ArticleCategory
+     * @throws SDKException
      */
     public function categoryGet($categoryId)
     {
@@ -157,6 +160,7 @@ class ArticleApiConnector extends BaseConnector
      * Retrieves all categories
      *
      * @return ArticleCategoryResultSet
+     * @throws SDKException
      */
     public function categoriesGet()
     {
@@ -187,7 +191,7 @@ class ArticleApiConnector extends BaseConnector
         !$article->getStatus() ?: $retData['status'] = $article->getStatus();
         !$article->getSegment() ?: $retData['segment'] = $article->getSegment();
         !$article->getTemplate() ?: $retData['template'] = $article->getTemplate();
-        !$article->getCreated() ?: $retData['created'] = $article->getCreated()->format(\DateTime::ISO8601);
+        !$article->getCreated() ?: $retData['created'] = $article->getCreated()->format(\DateTime::ATOM);
         !is_null($article->getTitle()) ?: $retData['title'] = $article->getTitle();
         !is_null($article->getStaticTags()) ?: $retData['static_tags'] = $article->getStaticTags();
         !$article->getCategory() ?: $retData['category'] = ['id' => $article->getCategory()->getId()];
@@ -195,7 +199,6 @@ class ArticleApiConnector extends BaseConnector
         !$article->getLocation() ?: $retData['location'] = ['id' => $article->getLocation()->getId()];
         !is_null($article->getTags()) ?: $retData['tags'] = $article->getTags();
 
-        !$article->getTitle() ?: $retData['title'] = $article->getTitle();
         !$article->getTextElements() ?: $retData['text_elements'] = $article->getTextElements();
 
         if (is_array($article->getImages())) {
@@ -219,25 +222,5 @@ class ArticleApiConnector extends BaseConnector
         }
 
         return json_encode($retData);
-    }
-
-    /**
-     * Converts an Image node into the appropriate
-     * array structore used for HTTP POST/PUT requests
-     *
-     * @param  Image  $image
-     * @return array
-     */
-    protected function prepareImageForDispatch(Image $image)
-    {
-        $retData = [];
-
-        !$image->getId() ?: $retData['id'] = $image->getId();
-        !$image->getUser() ?: $retData['user'] = $image->getUser()->getId();
-        !$image->getCaption() ?: $retData['caption'] = $image->getCaption();
-        !$image->getCopyright() ?: $retData['copyright'] = $image->getCopyright();
-        !$image->getDownloadUrl() ?: $retData['url'] = $image->getDownloadUrl();
-
-        return $retData;
     }
 }

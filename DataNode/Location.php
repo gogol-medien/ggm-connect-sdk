@@ -9,14 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace ggm\Connect\DataNodes;
+namespace ggm\Connect\DataNode;
 
 /**
- * Class ArticleCategory
+ * Class Location
  *
  * @package ggm-connect-sdk
  */
-class ArticleCategory extends DataNode
+class Location extends DataNode
 {
     /**
      * @var int
@@ -24,27 +24,14 @@ class ArticleCategory extends DataNode
     protected $id;
 
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $nameNorm;
-
-
-    /**
-     * Initializes a ArticleCategory object with the response
+     * Initializes a Location object with the response
      * data of a request to the corresponding api endpoint
      *
      * @param array $data
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
-        $this->name = isset($data['name']) ? $data['name'] : null;
-        $this->nameNorm = isset($data['name_norm']) ? $data['name_norm'] : null;
+        $this->id = $data['id'] ?? null;
     }
 
     /**
