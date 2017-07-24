@@ -63,6 +63,11 @@ class Eventitem extends DataNode
     protected $description;
 
     /**
+     * @var string
+     */
+    protected $address;
+
+    /**
      * @var array
      */
     protected $staticTags;
@@ -126,6 +131,7 @@ class Eventitem extends DataNode
 
         $this->title = $data['title'] ?? null;
         $this->description = $data['description'] ?? null;
+        $this->address = $data['address'] ?? null;
 
         $this->staticTags = $data['static_tags'] ?? null;
         $this->user = isset($data['user']) ? new User($data['user']) : null;
@@ -234,6 +240,24 @@ class Eventitem extends DataNode
     }
 
     /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     * @return Eventitem
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getStaticTags()
@@ -281,7 +305,7 @@ class Eventitem extends DataNode
      * @param EventCalendarCategory $category
      * @return Eventitem
      */
-    public function setCategory(EventCalendarCategory $category)
+    public function setCategory(EventCalendarCategory $category = null)
     {
         $this->category = $category;
         return $this;

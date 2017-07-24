@@ -42,9 +42,9 @@ abstract class Category extends DataNode
      */
     public function __construct(array $data = [])
     {
-        $this->id = isset($data['id']) ? $data['id'] : null;
-        $this->name = isset($data['name']) ? $data['name'] : null;
-        $this->nameNorm = isset($data['name_norm']) ? $data['name_norm'] : null;
+        $this->id = $data['id'] ?? null;
+        $this->name = $data['name'] ?? null;
+        $this->nameNorm = $data['name_norm'] ?? null;
     }
 
     /**
