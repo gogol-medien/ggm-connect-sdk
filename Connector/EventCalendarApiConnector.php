@@ -138,7 +138,7 @@ class EventCalendarApiConnector extends BaseConnector
      * @return EventitemResultSet
      * @throws SDKException
      */
-    public function evenitemSelectionGet($eventitemSelectionId)
+    public function eventitemSelectionGet($eventitemSelectionId)
     {
         $eventitemList = null;
 
