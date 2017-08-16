@@ -11,7 +11,7 @@
 
 namespace ggm\Connect\DataNode;
 
-use ggm\Connect\Model\DateTime;
+use ggm\Connect\Model\{DateTime, PoiData};
 
 
 /**
@@ -102,9 +102,14 @@ class Eventitem extends DataNode
      */
     protected $eventitemDates = [];
 
+    /**
+     * @var PoiData
+     */
+    protected $poiData;
+
 
     /**
-     * Initializes a Eventitem object with the response
+     * Initializes an Eventitem object with the response
      * data of a request to the corresponding api endpoint
      *
      * @param array $data
@@ -139,6 +144,8 @@ class Eventitem extends DataNode
         $this->location = isset($data['location']) ? new Location($data['location']) : null;
         $this->images = isset($data['images']) ? array_map(function($item) { return new Image($item); }, $data['images']) : null;
         $this->imageCount = isset($data['image_count']) ? $data['image_count'] : null;
+
+        $this->poiData = isset($data['poi_data']) && is_array($data['poi_data']) ? PoiData::fromArray($data['poi_data']) : null;
 
         if (isset($data['eventitem_dates']) && is_array($data['eventitem_dates'])) {
             foreach ($data['eventitem_dates'] as $dtString) {
@@ -353,6 +360,24 @@ class Eventitem extends DataNode
     public function getImageCount()
     {
         return $this->imageCount;
+    }
+
+    /**
+     * @return PoiData
+     */
+    public function getPoiData()
+    {
+        return $this->poiData;
+    }
+
+    /**
+     * @param PoiData $poiData
+     * @return Eventitem
+     */
+    public function setPoiData(PoiData $poiData = null)
+    {
+        $this->poiData = $poiData;
+        return $this;
     }
 
     /**

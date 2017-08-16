@@ -174,6 +174,10 @@ class EventCalendarApiConnector extends BaseConnector
         !$eventitem->getUser() ?: $retData['user'] = ['id' => $eventitem->getUser()->getId()];
         !$eventitem->getLocation() ?: $retData['location'] = ['id' => $eventitem->getLocation()->getId()];
 
+        if (!is_null($eventitem->getPoiData())) {
+            $retData['poi_data'] = $eventitem->getPoiData()->toArray();
+        }
+
         if (is_array($this->getEventitemDates())) {
             $retData['eventitem_dates'] = array_map(function($item) {
                 return (string)$item;
