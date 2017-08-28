@@ -12,14 +12,14 @@
 namespace ggm\Connect\DataNode;
 
 /**
- * Class ArticleCategoryResultSet
+ * Class EventCalendarCategoryResultSet
  *
  * @package ggm-connect-sdk
  */
-class ArticleCategoryResultSet extends ResultSet
+class EventCalendarCategoryResultSet extends ResultSet
 {
     /**
      * @var string
      */
-    protected static $hydrationClass = 'ggm\Connect\DataNode\ArticleCategory';
+    protected static $hydrationClass = 'ggm\Connect\DataNode\EventCalendarCategory';
 }

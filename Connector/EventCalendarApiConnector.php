@@ -11,6 +11,8 @@
 
 namespace ggm\Connect\Connector;
 
+use ggm\Connect\DataNode\EventCalendarCategory;
+use ggm\Connect\DataNode\EventCalendarCategoryResultSet;
 use ggm\Connect\DataNode\Eventitem;
 use ggm\Connect\DataNode\EventitemResultSet;
 
@@ -150,6 +152,47 @@ class EventCalendarApiConnector extends BaseConnector
         }
 
         return $eventitemList;
+    }
+
+    /**
+     * Retrieves the EventCalendarCategory node for an ID
+     *
+     * @param  int $categoryId
+     * @return EventCalendarCategory
+     * @throws SDKException
+     */
+    public function categoryGet($categoryId)
+    {
+        $category = null;
+
+        $uri = '/event/api/categories/'.$categoryId.'.json';
+        $response = $this->dispatchRequest($uri);
+
+        if ($response->getHttpCode() === 200) {
+            $category = new EventCalendarCategory($response->getBody());
+        }
+
+        return $category;
+    }
+
+    /**
+     * Retrieves all categories
+     *
+     * @return EventCalendarCategoryResultSet
+     * @throws SDKException
+     */
+    public function categoriesGet()
+    {
+        $categories = null;
+
+        $uri = '/event/api/categories.json';
+        $response = $this->dispatchRequest($uri);
+
+        if ($response->getHttpCode() === 200) {
+            $categories = new EventCalendarCategoryResultSet($response->getBody());
+        }
+
+        return $categories;
     }
 
     /**
