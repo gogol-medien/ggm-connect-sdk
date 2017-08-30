@@ -192,12 +192,12 @@ class ArticleApiConnector extends BaseConnector
         !$article->getSegment() ?: $retData['segment'] = $article->getSegment();
         !$article->getTemplate() ?: $retData['template'] = $article->getTemplate();
         !$article->getCreated() ?: $retData['created'] = $article->getCreated()->format(\DateTime::ATOM);
-        !is_null($article->getTitle()) ?: $retData['title'] = $article->getTitle();
-        !is_null($article->getStaticTags()) ?: $retData['static_tags'] = $article->getStaticTags();
+        is_null($article->getTitle()) ?: $retData['title'] = $article->getTitle();
+        is_null($article->getStaticTags()) ?: $retData['static_tags'] = $article->getStaticTags();
         !$article->getCategory() ?: $retData['category'] = ['id' => $article->getCategory()->getId()];
         !$article->getUser() ?: $retData['user'] = ['id' => $article->getUser()->getId()];
         !$article->getLocation() ?: $retData['location'] = ['id' => $article->getLocation()->getId()];
-        !is_null($article->getTags()) ?: $retData['tags'] = $article->getTags();
+        is_null($article->getTags()) ?: $retData['tags'] = $article->getTags();
 
         !$article->getTextElements() ?: $retData['text_elements'] = $article->getTextElements();
 

@@ -210,8 +210,8 @@ class EventCalendarApiConnector extends BaseConnector
         !$eventitem->getStatus() ?: $retData['status'] = $eventitem->getStatus();
         !$eventitem->getCreated() ?: $retData['created'] = $eventitem->getCreated()->format(\DateTime::ATOM);
 
-        !is_null($eventitem->getTitle()) ?: $retData['title'] = $eventitem->getTitle();
-        !is_null($eventitem->getDescription()) ?: $retData['description'] = $eventitem->getDescription();
+        is_null($eventitem->getTitle()) ?: $retData['title'] = $eventitem->getTitle();
+        is_null($eventitem->getDescription()) ?: $retData['description'] = $eventitem->getDescription();
 
         !$eventitem->getCategory() ?: $retData['category'] = ['id' => $eventitem->getCategory()->getId()];
         !$eventitem->getUser() ?: $retData['user'] = ['id' => $eventitem->getUser()->getId()];
