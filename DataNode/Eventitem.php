@@ -383,7 +383,7 @@ class Eventitem extends DataNode
     /**
      * @return array
      */
-    public function getEvenitemDates()
+    public function getEventitemDates()
     {
         return $this->eventitemDates;
     }
