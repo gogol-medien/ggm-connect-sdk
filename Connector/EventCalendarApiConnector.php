@@ -15,6 +15,7 @@ use ggm\Connect\DataNode\EventCalendarCategory;
 use ggm\Connect\DataNode\EventCalendarCategoryResultSet;
 use ggm\Connect\DataNode\Eventitem;
 use ggm\Connect\DataNode\EventitemResultSet;
+use ggm\Connect\DataNode\Image;
 
 /**
  * Class EventCalendarApiConnector

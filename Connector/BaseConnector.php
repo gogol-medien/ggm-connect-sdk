@@ -12,6 +12,7 @@
 namespace ggm\Connect\Connector;
 
 use ggm\Connect\Authentication\AccessToken;
+use ggm\Connect\DataNode\Image;
 use ggm\Connect\Exception\SDKException;
 use ggm\Connect\Http\HttpClient;
 use ggm\Connect\Http\OAuthClient;
