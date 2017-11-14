@@ -149,7 +149,7 @@ class Eventitem extends DataNode
 
         if (isset($data['eventitem_dates']) && is_array($data['eventitem_dates'])) {
             foreach ($data['eventitem_dates'] as $dtString) {
-                $dt = DateTime::initWithString($dtString);
+                $dt = DateTime::fromString($dtString);
 
                 if ($dt) {
                     $this->eventitemDates[] = $dt;

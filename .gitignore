@@ -3,3 +3,4 @@
 /debug
 *.sublime-*
 composer.lock
+/nbproject/*

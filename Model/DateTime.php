@@ -18,97 +18,134 @@ namespace ggm\Connect\Model;
  */
 class DateTime
 {
-    /**
-     * @var string
-     */
-    protected $date;
+    const TIME_SEPARATOR = 'T';
+    const DATE_END_SEPARATOR = 'E';
+
+    const FORMAT_DATE = 'Y-m-d';
+    const FORMAT_DATE_TIME = 'Y-m-d\TH:i:s';
 
     /**
-     * @var string
+     * @var \DateTime
      */
-    protected $time;
+    private $dateStart;
 
     /**
-     * @var bool
+     * @var \DateTime
      */
-    protected $hasTime = false;
-
+    private $dateEnd;
 
     /**
-     * Date format: 'YYYY-MM-DD'
-     *
-     * @param string $date
-     * @return DateTime
+     * @var boolean
      */
-    public function setDate(string $date)
+    private $dateHasTime = false;
+
+    /**
+     * @param \DateTime $dateStart
+     * @return \ggm\Connect\Model\DateTime
+     */
+    public function setDateStart(\DateTime $dateStart)
     {
-        $this->date = $date;
+        $this->dateStart = $dateStart;
         return $this;
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
-    public function getDate()
+    public function getDateStart()
     {
-        return $this->date;
+        return $this->dateStart;
     }
 
     /**
-     * Time format: 'HH:MM:SS'
-     *
-     * @param string|null $time
-     * @return DateTime
+     * @param \DateTime $dateEnd
+     * @return \ggm\Connect\Model\DateTime
      */
-    public function setTime(string $time = null)
+    public function setDateEnd(\DateTime $dateEnd)
     {
-        $this->time = $time;
-
-        $this->hasTime = !is_null($time);
-
+        $this->dateEnd = $dateEnd;
         return $this;
     }
 
     /**
-     * @return string|null
+     * @return \DateTime
      */
-    public function getTime()
+    public function getDateEnd()
     {
-        return $this->time;
+        return $this->dateEnd;
     }
 
     /**
-     * Indicates whether the DateTime object has a time set
-     *
+     * @param bool $dateHasTime
+     * @return \ggm\Connect\Model\DateTime
+     */
+    public function setDateHasTime($dateHasTime)
+    {
+        $this->dateHasTime = $dateHasTime;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
-    public function getHasTime()
+    public function getDateHasTime()
     {
-        return $this->hasTime;
+        return $this->dateHasTime;
     }
 
     /**
-     * Creates a new DateTime instances from a formatted string
+     * Creates a new DateTime instance from a formatted string
      * as it is returned from API requests.
      *
-     * Format: '{YYYY}-{MM}-{DD}[T{HH}:{MM}:{SS}]'
+     * Format: '{YYYY}-{MM}-{DD}[T{HH}:{MM}:{SS}[E{YYYY}-{MM}-{DD}T{HH}:{MM}:{SS}]]'
      *
-     * @param  string $data
+     * Valid possibilities for string:
+     * 1. date start without time:      2017-11-10
+     * 2. date start with time:         2017-11-10T09:30:00
+     * 3. date start with date end:     2017-11-10T09:30:00E2017-11-10T12:45:00
+     *
+     * @param  string $string
      * @return DateTime
      */
-    public static function initWithString(string $data)
+    public static function fromString(string $string)
     {
         $matches = [];
 
-        if (preg_match('/^(\d{4}-\d{2}-\d{2})(?:T(\d{2}:\d{2}:\d{2})){0,1}$/', $data, $matches)) {
+        if (preg_match('/^(\d{4}-\d{2}-\d{2})(?:'.self::TIME_SEPARATOR.'(\d{2}:\d{2}:\d{2})(?:'.self::DATE_END_SEPARATOR.'(\d{4}-\d{2}-\d{2})'.self::TIME_SEPARATOR.'(\d{2}:\d{2}:\d{2})){0,1}){0,1}$/', $string, $matches)) {
 
-            $instance = (new static())->setDate($matches[1]);
+            $invalid = false;
 
-            if (count($matches) === 3) {
-                $instance->setTime($matches[2]);
+            // create DateTime
+            $dateTime = new static();
+
+            // Fill DateTime with data
+            switch(count($matches)) {
+                // dateStart
+                case 2:
+                    $dateTime->setDateStart(date_create($matches[1]));
+                    $dateTime->setDateHasTime(false);
+                    break;
+                // dateStart, dateStartTime
+                case 3:
+                    $dateTime->setDateStart(date_create($matches[1].self::TIME_SEPARATOR.$matches[2]));
+                    $dateTime->setDateHasTime(true);
+                    break;
+                // dateStart, dateStartTime, dateEnd, dateEndTime
+                case 5:
+                    $dateTime->setDateStart(date_create($matches[1].self::TIME_SEPARATOR.$matches[2]));
+                    $dateTime->setDateEnd(date_create($matches[3].self::TIME_SEPARATOR.$matches[4]));
+                    $dateTime->setDateHasTime(true);
+                    break;
+                default:
+                    $invalid = true;
             }
 
-            return $instance;
+            // dateStart before dateEnd
+            if (!$invalid && $dateTime->getDateEnd() instanceof \DateTime && $dateTime->getDateStart() >= $dateTime->getDateEnd()) {
+                $invalid = true;
+            }
+
+            return $invalid ? null : $dateTime;
 
         } else {
             return null;
@@ -124,16 +161,20 @@ class DateTime
      */
     public function __toString()
     {
-        $segments = [];
+        $string = '';
 
-        if ($this->getDate()) {
-            $segments[] = $this->getDate();
+        // if dateStart is set
+        if ($this->getDateStart() instanceof \DateTime) {
+            // format dateStart
+            $string .= $this->getDateHasTime() ? $this->getDateStart()->format(DateTime::FORMAT_DATE_TIME) : $this->getDateStart()->format(DateTime::FORMAT_DATE);
+
+            // if dateEnd is set
+            if ($this->getDateEnd() instanceof \DateTime) {
+                // format dateEnd
+                $string .= self::DATE_END_SEPARATOR.$this->getDateEnd()->format(DateTime::FORMAT_DATE_TIME);
+            }
         }
 
-        if ($this->getHasTime() && $this->getTime()) {
-            $segments[] = $this->getTime();
-        }
-
-        return count($segments) ? join('T', $segments) : '';
+        return $string;
     }
 }
