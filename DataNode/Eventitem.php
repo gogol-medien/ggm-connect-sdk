@@ -100,7 +100,7 @@ class Eventitem extends DataNode
     /**
      * @var array
      */
-    protected $eventitemDates = [];
+    protected $eventitemDates;
 
     /**
      * @var PoiData
@@ -392,7 +392,7 @@ class Eventitem extends DataNode
      * @param array $eventitemDates
      * @return Eventitem
      */
-    public function setEventitemDates(array $eventitemDates)
+    public function setEventitemDates(array $eventitemDates = null)
     {
         $this->eventitemDates = $eventitemDates;
         return $this;

@@ -222,10 +222,10 @@ class EventCalendarApiConnector extends BaseConnector
             $retData['poi_data'] = $eventitem->getPoiData()->toArray();
         }
 
-        if (is_array($eventitem->getEvenitemDates())) {
+        if (is_array($eventitem->getEventitemDates())) {
             $retData['eventitem_dates'] = array_map(function($item) {
                 return (string) $item;
-            }, $eventitem->getEvenitemDates());
+            }, $eventitem->getEventitemDates());
         }
 
         if (is_array($eventitem->getImages())) {
