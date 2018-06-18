@@ -49,6 +49,11 @@ class Image extends DataNode
     protected $urlSet;
 
     /**
+     * @var int
+     */    
+    protected $remoteId;
+
+    /**
      * @var string
      */
     protected $downloadUrl;
@@ -67,6 +72,7 @@ class Image extends DataNode
         $this->caption = $data['caption'] ?? null;
         $this->copyright = $data['copyright'] ?? null;
         $this->urlSet = $data['url_set'] ?? null;
+        $this->remoteId = $data['remote_id'] ?? null;        
     }
 
     /**
@@ -75,6 +81,11 @@ class Image extends DataNode
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getRemoteId()
+    {
+        return $this->remoteId;
     }
 
     /**
