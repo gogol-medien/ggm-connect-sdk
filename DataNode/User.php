@@ -112,7 +112,7 @@ class User extends DataNode
         $this->userSegment = isset($data['user_segment']) ? $data['user_segment'] : null;
         $this->location = isset($data['location']) ? new Location($data['location']) : null;
         $this->staticTags = isset($data['static_tags']) && is_array($data['static_tags']) ? $data['static_tags'] : null;
-        $this->avatar = isset($data['avatar']) && is_array($data['avatar']) ? new Image(['avatar']) : null;
+        $this->avatar = isset($data['avatar']) && is_array($data['avatar']) ? new Image($data['avatar']) : null;
     }
 
     /**
