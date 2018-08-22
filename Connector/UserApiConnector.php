@@ -11,6 +11,7 @@
 
 namespace ggm\Connect\Connector;
 
+use ggm\Connect\DataNode\Image;
 use ggm\Connect\DataNode\User;
 use ggm\Connect\DataNode\UserResultSet;
 use ggm\Connect\Exception\HtttpException;
@@ -65,4 +66,26 @@ class UserApiConnector extends BaseConnector
 
         return $user;
     }
+
+    /**
+     * Retrieves the Image for an User Image ID
+     *
+     * @param  int $imageId
+     * @return Image
+     * @throws SDKException
+     */
+    public function imageGet($imageId)
+    {
+        $image = null;
+
+        $uri = '/user/api/images/'.$imageId.'.json';
+        $response = $this->dispatchRequest($uri);
+
+        if ($response->getHttpCode() === 200) {
+            $image = new Image($response->getBody());
+        }
+
+        return $image;
+    }
+
 }
