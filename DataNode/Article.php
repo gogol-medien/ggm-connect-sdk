@@ -25,11 +25,9 @@ class Article extends DataNode
     const STATUS_REJECTED = 'rejected';
     const STATUS_DELETED = 'deleted';
 
-    // Article Segment constants
-    const SEGMENT_ARTICLE = 'article';
-    const SEGMENT_IMAGE_POST = 'image_post';
-    const SEGMENT_IMAGE_GALLERY = 'image_gallery';
-    const SEGMENT_LOTTERY = 'lottery';
+    // Static Tag constants
+    const STATIC_TAG_COMMERCIAL = 'commercial';
+    const STATIC_TAG_PREMIUM_CONTENT = 'premium_content';
 
     // TextElement constants
     const TE_SUBLINE = 'subline';
@@ -67,11 +65,6 @@ class Article extends DataNode
      * @var string
      */
     protected $title;
-
-    /**
-     * @var string
-     */
-    protected $segment;
 
     /**
      * @var array
@@ -136,14 +129,13 @@ class Article extends DataNode
             $this->updated = date_create($data['updated']) ?: null;
         }
 
+        if (isset($data['static_tags']) && in_array($data['static_tags'], [self::STATIC_TAG_COMMERCIAL, self::STATIC_TAG_PREMIUM_CONTENT])) {
+            $this->staticTags = $data['static_tags'];
+        }
+
         $this->template = isset($data['template']) ? $data['template'] : null;
         $this->title = isset($data['title']) ? $data['title'] : null;
 
-        if (isset($data['segment']) && in_array($data['segment'], [self::SEGMENT_ARTICLE, self::SEGMENT_LOTTERY, self::SEGMENT_IMAGE_POST, self::SEGMENT_IMAGE_GALLERY])) {
-            $this->segment = $data['segment'];
-        }
-
-        $this->staticTags = isset($data['static_tags']) ? $data['static_tags'] : null;
         $this->textElements = isset($data['text_elements']) ? $data['text_elements'] : [];
         $this->user = isset($data['user']) ? new User($data['user']) : null;
         $this->category = isset($data['category']) ? new ArticleCategory($data['category']) : null;
@@ -238,24 +230,6 @@ class Article extends DataNode
     public function setTitle($title)
     {
         $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSegment()
-    {
-        return $this->segment;
-    }
-
-    /**
-     * @param string $segment
-     * @return Article
-     */
-    public function setSegment($segment)
-    {
-        $this->segment = $segment;
         return $this;
     }
 
