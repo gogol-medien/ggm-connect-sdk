@@ -61,7 +61,7 @@ class Response
         if (isset($info['content_type']) && $info['content_type']) {
             $this->header['content_type'] = $info['content_type'];
         } else {
-            throw new ResponseException('Malformed response header (missing content type)');
+           // throw new ResponseException('Malformed response header (missing content type)');
         }
 
         $this->body = $response;

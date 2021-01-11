@@ -30,6 +30,7 @@ class HttpClient
         $ch = curl_init($url);
 
         $params = array(
+			CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true
         );
@@ -68,6 +69,7 @@ class HttpClient
         $ch = curl_init($url);
 
         $params = array(
+			CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_POST => true,
@@ -108,6 +110,7 @@ class HttpClient
         $ch = curl_init($url);
 
         $params = array(
+			CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CUSTOMREQUEST => 'PUT',
